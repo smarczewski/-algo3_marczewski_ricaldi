@@ -71,13 +71,13 @@ responderSegunCantidadDeInteraccionesCon: UnPersonajeJugador
 		  ^ frasesDesconocido at: (cantidadDeInteracciones min: frasesDesconocido size). ]! !
 
 
-!CarolinaLaCurandera class methodsFor: 'as yet unclassified' stamp: 'SDM 9/29/2021 21:50:27'!
+!CarolinaLaCurandera class methodsFor: 'as yet unclassified' stamp: 'SDM 10/4/2021 16:46:28'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
 	frasesDesconocido := #('¿Estás enfermo forastero?' 'Ah, solo quieres conversar' 'Cuando tengas una aflicción, ven a verme' ).
 	frasesPrometedor := #('Salud aventurero!!' 'Toma esta pócima que te hará crecer el pelo. Y cuando tengas una aflicción, ven a verme' ).
-	cantidadDeInteraccionesPorPersonaje := ((Dictionary new) add: (#Hamilton->1); yourself).! !
+	cantidadDeInteraccionesPorPersonaje := ((Dictionary new) add: (#Hamilton->0); yourself).! !
 
 
 !classDefinition: #ElPuebloDeRiverwood category: 'Ejercicio1-PNJ-Episodio2'!
@@ -112,7 +112,7 @@ verComoPrometedorA: UnPersonajeJugador
 	personajesJugadoresPrometedores add: UnPersonajeJugador.! !
 
 
-!ElPuebloDeRiverwood class methodsFor: 'as yet unclassified' stamp: 'SDM 9/29/2021 21:50:27'!
+!ElPuebloDeRiverwood class methodsFor: 'as yet unclassified' stamp: 'SDM 10/4/2021 16:46:28'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -488,13 +488,13 @@ responderSegunCantidadDeInteraccionesCon: UnPersonajeJugador
 		[ ^ frasesDesconocido at: (cantidadDeInteracciones min: frasesDesconocido size).  ]! !
 
 
-!TreborElGuardiaDeSkyrim class methodsFor: 'as yet unclassified' stamp: 'SDM 9/29/2021 21:50:27'!
+!TreborElGuardiaDeSkyrim class methodsFor: 'as yet unclassified' stamp: 'SDM 10/4/2021 16:46:28'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
 	frasesDesconocido := #('Hola forastero' '¿Todo bien?' '¿Algún problema?' ).
 	frasesPrometedor := #('Bienvenido aventurero!!' 'Espero que tengas una buena estadia en Riverwood' ).
-	cantidadDeInteraccionesPorPersonaje := ((Dictionary new) add: (#Hamilton->1); yourself).! !
+	cantidadDeInteraccionesPorPersonaje := ((Dictionary new) add: (#Hamilton->2); yourself).! !
 
 CarolinaLaCurandera initializeAfterFileIn!
 ElPuebloDeRiverwood initializeAfterFileIn!
