@@ -283,7 +283,7 @@ test08WintExampleTestWorksAsExpected
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
-	instanceVariableNames: 'elements stack'
+	instanceVariableNames: 'stack'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
@@ -299,10 +299,9 @@ size
 	^stack size! !
 
 
-!OOStack methodsFor: 'initialization' stamp: 'SDM 11/4/2021 13:39:52'!
+!OOStack methodsFor: 'initialization' stamp: 'Br 11/4/2021 17:12:59'!
 initialize
 
-	elements := OrderedCollection new.
 	stack := OOStackEmpty new.! !
 
 
@@ -467,6 +466,109 @@ pop
 	^stack! !
 
 
+!classDefinition: #Prefix category: 'Stack-Exercise'!
+Object subclass: #Prefix
+	instanceVariableNames: 'prefix'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!Prefix methodsFor: 'initialization' stamp: 'SDM 11/4/2021 18:36:28'!
+initalizeWith: aString
+
+	self subclassResponsibility ! !
+
+
+!Prefix methodsFor: 'comparing' stamp: 'SDM 11/4/2021 18:37:42'!
+isContainedIn: aString
+
+	^aString beginsWith: prefix! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Prefix class' category: 'Stack-Exercise'!
+Prefix class
+	instanceVariableNames: ''!
+
+!Prefix class methodsFor: 'as yet unclassified' stamp: 'Br 11/4/2021 18:07:13'!
+canInstantianteWith: aString
+	self subclassResponsibility! !
+
+!Prefix class methodsFor: 'as yet unclassified' stamp: 'Br 11/4/2021 18:12:13'!
+with: aString
+	Prefix  subclasses do: [:subclass | (subclass canInstantianteWith: aString) ifTrue:[^subclass new
+			initalizeWith: aString ]] ! !
+
+
+!classDefinition: #PrefixEmpty category: 'Stack-Exercise'!
+Prefix subclass: #PrefixEmpty
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!PrefixEmpty methodsFor: 'initialization' stamp: 'SDM 11/4/2021 18:39:16'!
+initalizeWith: aString
+
+	self error: SentenceFinderByPrefix chosenPrefixIsEmptyErrorDescription ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PrefixEmpty class' category: 'Stack-Exercise'!
+PrefixEmpty class
+	instanceVariableNames: ''!
+
+!PrefixEmpty class methodsFor: 'as yet unclassified' stamp: 'Br 11/4/2021 18:02:51'!
+canInstantianteWith: aString
+	^ aString sameAs: ''.! !
+
+
+!classDefinition: #PrefixSpace category: 'Stack-Exercise'!
+Prefix subclass: #PrefixSpace
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!PrefixSpace methodsFor: 'initialization' stamp: 'SDM 11/4/2021 18:39:36'!
+initalizeWith: aString
+
+	self error: SentenceFinderByPrefix chosenPrefixIncludesEmptySpacesErrorDescription! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PrefixSpace class' category: 'Stack-Exercise'!
+PrefixSpace class
+	instanceVariableNames: ''!
+
+!PrefixSpace class methodsFor: 'as yet unclassified' stamp: 'Br 11/4/2021 18:02:33'!
+canInstantianteWith: aString
+	^ aString includesSubString: ' '.! !
+
+
+!classDefinition: #PrefixValid category: 'Stack-Exercise'!
+Prefix subclass: #PrefixValid
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!PrefixValid methodsFor: 'initialization' stamp: 'SDM 11/4/2021 18:39:48'!
+initalizeWith: aString
+
+	prefix := aString ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PrefixValid class' category: 'Stack-Exercise'!
+PrefixValid class
+	instanceVariableNames: ''!
+
+!PrefixValid class methodsFor: 'as yet unclassified' stamp: 'Br 11/4/2021 18:04:45'!
+canInstantianteWith: aString
+	^ (PrefixEmpty canInstantianteWith: aString ) not and: (PrefixSpace canInstantianteWith: aString) not.! !
+
+
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
 	instanceVariableNames: 'stack'
@@ -480,28 +582,33 @@ initializeStack: aStack
 	stack := aStack! !
 
 
-!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'SDM 11/4/2021 15:09:14'!
+!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'SDM 11/4/2021 18:43:20'!
 find: aString
 
-	| wantedSentences auxStack aSentence |
+	| wantedSentences auxStack prefix |
 	wantedSentences := OrderedCollection new.	
 	auxStack :=OOStack new.
-
-	(aString includesSubString: ' ') ifTrue: [self error: SentenceFinderByPrefix chosenPrefixIncludesEmptySpacesErrorDescription].
-	(aString sameAs: '') ifTrue: [self error: SentenceFinderByPrefix chosenPrefixIsEmptyErrorDescription ].
-		
-	1 to: stack size do: [:x | 
-		aSentence := stack pop.
-		(aSentence beginsWith: aString ) ifTrue: [wantedSentences add: aSentence].
-		auxStack push: aSentence.
-		].
-
-	1 to: auxStack size do: [:x | 
-		aSentence := auxStack pop.
-		stack push: aSentence.
-		].
 	
+	prefix := Prefix with: aString.
+	
+	self reverseStack: stack to: auxStack withCondition: [:aSentence| prefix isContainedIn: aSentence ] AndPerformOperation: [:aSentence| wantedSentences add: aSentence].
+	
+	self reverseStack: auxStack to: stack withCondition: [:aSentence| false] AndPerformOperation: [:aSentence| false].
+
 	^wantedSentences! !
+
+
+!SentenceFinderByPrefix methodsFor: 'private' stamp: 'SDM 11/4/2021 18:42:44'!
+reverseStack: aStack to: anAuxStack withCondition: aCondition AndPerformOperation: anOperation
+
+	| aSentence |
+	
+	1 to: aStack size do: [:x | 
+		aSentence := aStack pop.
+		(aCondition value: aSentence) ifTrue: [anOperation value: aSentence] .
+		anAuxStack push: aSentence.
+		].
+	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
